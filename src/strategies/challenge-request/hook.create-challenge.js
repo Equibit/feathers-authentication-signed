@@ -1,8 +1,9 @@
 const crypto = require('crypto');
 
 const defaults = {
-  userService: 'users',
-  idField: 'id'
+  idField: 'id',
+  name: 'challenge-request',
+  userService: 'users'
 };
 
 // handle step 1
@@ -15,7 +16,8 @@ module.exports = function (options = {}) {
     let userId = user[options.idField];
 
     return new Promise(function (resolve, reject) {
-      if (hook.data.strategy === 'challenge-request') {
+      // Only run this hook for the 'challenge-request' strategy.
+      if (hook.data.strategy === options.name) {
         // An accessToken should not be returned.
         delete hook.result.accessToken;
 
