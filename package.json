@@ -52,6 +52,7 @@
     "lib": "lib"
   },
   "dependencies": {
+    "crypto": "^0.0.3",
     "debug": "^2.6.3",
     "feathers-authentication-local": "^0.3.3",
     "feathers-errors": "^2.6.2"
