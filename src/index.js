@@ -32,6 +32,7 @@ function plugin (options = {}) {
     assignSharedOptions(['idField', 'userService'], options);
 
     app.configure(challengeRequest(options.challengeRequest));
+    app.configure(challenge(options.challenge));
   }
 
   return feathersAuthenticationSigned;
