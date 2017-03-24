@@ -1,19 +1,20 @@
 // import errors from 'feathers-errors';
 const makeDebug = require('debug');
 const local = require('feathers-authentication-local');
-const authHook = require('./hook.create-challenge');
+const createChallenge = require('./hook.create-challenge');
 const preventSocketAuth = require('./hook.prevent-socket-auth');
-const addDummyPassword = require('./hook.add-dummy-password');
 const createVerifier = require('./verifier');
 
 const debug = makeDebug('feathers-authentication-signed:challenge-request');
 const defaults = {
   idField: 'id',
   name: 'challenge-request',
+  usernameField: 'email',
+  passwordField: 'email',
   userService: 'users'
 };
 
-module.exports = function init (options = {}) {
+module.exports = function challengeRequestStrategy (options = {}) {
   options = Object.assign(defaults, options);
   debug('Initializing feathers-authentication-signed:challenge-request plugin', options);
 
@@ -27,13 +28,12 @@ module.exports = function init (options = {}) {
       before: {
         create: [
           // TODO: Test to make sure the socket doesn't get authenticated.
-          preventSocketAuth(),
-          addDummyPassword()
+          preventSocketAuth()
         ]
       },
       after: {
         create: [
-          authHook(options)
+          createChallenge(options)
         ]
       }
     });
