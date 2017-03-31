@@ -1,38 +1,28 @@
-// import errors from 'feathers-errors';
 const makeDebug = require('debug');
+const crypto = require('crypto');
 const challengeRequest = require('./strategies/challenge-request/index');
 const challenge = require('./strategies/challenge/index');
-const addUserSalt = require('./hooks/add-user-salt');
-
+const hashPassword = require('./hooks/hash-password');
+const generateSalt = require('./hooks/generate-salt');
 const debug = makeDebug('feathers-authentication-signed');
 const defaults = {
   idField: 'id',
-  userService: 'users'
+  userService: 'users',
+  pbkdf2: crypto.pbkdf2,
+  createHmac: crypto.createHmac,
+  createHash: crypto.createHash
 };
-
-function assignSharedOptions (fields, options) {
-  options.challenge = options.challenge || {};
-  options.challengeRequest = options.challengeRequest || {};
-
-  fields.forEach(field => {
-    if (options[field]) {
-      options.challenge[field] = options[field];
-      options.challengeRequest[field] = options[field];
-    }
-  });
-}
 
 function plugin (options = {}) {
   options = Object.assign({}, defaults, options);
+  plugin.options = options;
   debug('Initializing feathers-authentication-signed plugin with options', options);
 
   function feathersAuthenticationSigned () {
     const app = this;
 
-    assignSharedOptions(['idField', 'userService'], options);
-
-    app.configure(challengeRequest(options.challengeRequest));
-    app.configure(challenge(options.challenge));
+    app.configure(challengeRequest(options));
+    app.configure(challenge(options));
   }
 
   return feathersAuthenticationSigned;
@@ -41,7 +31,8 @@ function plugin (options = {}) {
 plugin.challengeRequest = challengeRequest;
 plugin.challenge = challenge;
 plugin.hooks = {
-  addUserSalt
+  hashPassword,
+  generateSalt
 };
 
 module.exports = plugin;

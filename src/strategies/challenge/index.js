@@ -1,7 +1,7 @@
 // import errors from 'feathers-errors';
 const makeDebug = require('debug');
 const local = require('feathers-authentication-local');
-// const verifySignature = require('./hook.verify-signature');
+const checkTwoFactor = require('./hook.two-factor');
 const createVerifier = require('./verifier');
 
 const debug = makeDebug('feathers-authentication-signed:challenge');
@@ -25,12 +25,18 @@ module.exports = function challengeStrategy (options = {}) {
 
     app.service('authentication').hooks({
       before: {
-        create: [
-          // verifySignature(options)
-        ]
+        create: []
       },
       after: {
-        create: []
+        create: [
+          hook => {
+            if (hook.data.strategy === 'challenge') {
+              console.log('hook.params.authenticated', hook.params.authenticated);
+              debugger;
+            }
+          },
+          checkTwoFactor(options)
+        ]
       }
     });
   };

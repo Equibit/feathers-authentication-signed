@@ -10,12 +10,12 @@ const defaults = {
   idField: 'id',
   name: 'challenge-request',
   usernameField: 'email',
-  passwordField: 'email',
+  passwordField: 'signature',
   userService: 'users'
 };
 
 module.exports = function challengeRequestStrategy (options = {}) {
-  options = Object.assign(defaults, options);
+  options = Object.assign({}, defaults, options);
   debug('Initializing feathers-authentication-signed:challenge-request plugin', options);
 
   return function () {
@@ -28,7 +28,7 @@ module.exports = function challengeRequestStrategy (options = {}) {
       before: {
         create: [
           // TODO: Test to make sure the socket doesn't get authenticated.
-          preventSocketAuth()
+          preventSocketAuth(options)
         ]
       },
       after: {

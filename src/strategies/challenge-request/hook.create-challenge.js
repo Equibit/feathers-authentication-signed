@@ -6,9 +6,11 @@ const defaults = {
   userService: 'users'
 };
 
-// handle step 1
+/**
+ * Creates a new challenge and adds it to the user record.
+ */
 module.exports = function (options = {}) {
-  options = Object.assign(defaults, options);
+  options = Object.assign({}, defaults, options);
 
   return function (hook) {
     let userService = hook.app.service(options.userService);

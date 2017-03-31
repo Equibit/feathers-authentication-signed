@@ -6,7 +6,13 @@ module.exports = function createVerifier (options = {}, app) {
     throw new Error('You must provide a `userService` in the options for the challenge-request strategy verifier');
   }
   return class ChallengeRequestVerifier extends Verifier {
-    verify (req, email, password, done) {
+    verify (req, email, signature, done) {
+      // Make sure request was signed. This will be caught implicitly by
+      // Passport, but making sure it's checked explicitly here is preferable.
+      if (!signature) {
+        done(new errors.NotAuthenticated('invalid login'), null);
+      }
+
       app.service(options.userService).find({email})
         .then(users => {
           users = users.data || users;
