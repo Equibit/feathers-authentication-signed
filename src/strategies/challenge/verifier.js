@@ -17,7 +17,6 @@ module.exports = function createVerifier (options = {}, app) {
    */
   return class ChallengeVerifier extends Verifier {
     verify (req, email, signature, done) {
-      debugger;
       app.service(options.userService).find({email})
         .then(users => {
           users = users.data || users;
