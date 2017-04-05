@@ -2,6 +2,7 @@
 const makeDebug = require('debug');
 const local = require('feathers-authentication-local');
 const checkTwoFactor = require('./hook.two-factor');
+const removeChallenge = require('./hook.remove-challenge');
 const createVerifier = require('./verifier');
 
 const debug = makeDebug('feathers-authentication-signed:challenge');
@@ -32,12 +33,7 @@ module.exports = function challengeStrategy (options = {}) {
       },
       after: {
         create: [
-          hook => {
-            if (hook.data.strategy === 'challenge') {
-              console.log('hook.params.authenticated', hook.params.authenticated);
-              debugger;
-            }
-          },
+          removeChallenge(options),
           checkTwoFactor(options)
         ]
       }
