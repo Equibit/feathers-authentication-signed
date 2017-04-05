@@ -20,7 +20,6 @@ module.exports = function (options = {}) {
     return new Promise(function (resolve, reject) {
       // Only run for the challenge strategy.
       if (hook.data.strategy === options.name) {
-        debugger;
         const twoFactor = hook.params[entity][twoFactorField];
 
         // At this point, hook.result would be { accessToken }

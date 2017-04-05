@@ -22,22 +22,38 @@ module.exports = function createVerifier (options = {}, app) {
           users = users.data || users;
           let user = users[0];
           if (user) {
-            let { password, challenge, twoFactor } = user;
+            let { challenge, twoFactor } = user;
+            let password = user[options.dbPasswordField];
+            let tempPassword = user[options.dbTempPasswordField];
+            let tempPasswordExpiration = user[options.dbTempPasswordExpiresAtField];
 
             // Make sure the signatures match.
-            return cryptoUtils.sign({email, challenge}, password)
-              .then(signedData => {
-                if (signedData.signature === signature) {
-                  // If twoFactor is enabled...
-                  if (twoFactor) {
-                    // ...don't authenticate the socket.
-                    req.params.authenticated = false;
-                  }
-                  done(null, user);
-                } else {
-                  done(new errors.NotAuthenticated('invalid login'), null);
+            return cryptoUtils.sign({email, challenge}, password).then(signedData => {
+              if (signedData.signature === signature) {
+                // If twoFactor is enabled, don't authenticate the socket.
+                if (twoFactor) {
+                  req.params.authenticated = false;
                 }
-              });
+                return done(null, user);
+
+              // If signatures didn't match, check the tempPassword.
+              } else {
+                // Check that the tempPassword hasn't expired.
+                if (tempPasswordExpiration) {
+                  if (new Date(tempPasswordExpiration).getTime() < new Date().getTime()) {
+                    return done(new errors.NotAuthenticated('invalid login'), null);
+                  }
+                }
+                return cryptoUtils.sign({email, challenge}, tempPassword).then(signedData => {
+                  if (signedData.signature === signature) {
+                    req.params.usingTempPassword = true;
+                    done(null, user);
+                  } else {
+                    done(new errors.NotAuthenticated('invalid login'), null);
+                  }
+                });
+              }
+            });
 
           // Or there was no user.
           } else {

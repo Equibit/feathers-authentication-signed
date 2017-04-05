@@ -10,7 +10,10 @@ const defaults = {
   name: 'challenge',
   usernameField: 'email',
   passwordField: 'signature',
-  userService: 'users'
+  userService: 'users',
+  dbPasswordField: 'password',
+  dbTempPasswordField: 'tempPassword',
+  dbTempPasswordExpiresAtField: undefined // Setting this checks this field to compare expiration to the current date.
 };
 
 module.exports = function challengeStrategy (options = {}) {
