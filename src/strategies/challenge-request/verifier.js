@@ -13,7 +13,7 @@ module.exports = function createVerifier (options = {}, app) {
         done(new errors.NotAuthenticated('invalid login'), null);
       }
 
-      app.service(options.userService).find({email})
+      app.service(options.userService).find({query: {email}})
         .then(users => {
           users = users.data || users;
           let user = users[0];
