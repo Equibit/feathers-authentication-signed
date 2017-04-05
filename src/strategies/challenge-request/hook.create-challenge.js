@@ -13,13 +13,13 @@ module.exports = function (options = {}) {
   options = Object.assign({}, defaults, options);
 
   return function (hook) {
-    let userService = hook.app.service(options.userService);
-    let user = hook.params.user;
-    let userId = user[options.idField];
-
     return new Promise(function (resolve, reject) {
       // Only run this hook for the 'challenge-request' strategy.
       if (hook.data.strategy === options.name) {
+        let userService = hook.app.service(options.userService);
+        let user = hook.params.user;
+        let userId = user[options.idField];
+
         // An accessToken should not be returned.
         delete hook.result.accessToken;
 
