@@ -20,8 +20,6 @@ module.exports = function (options = {}) {
         let user = hook.params.user;
         let userId = user[options.idField];
 
-        // An accessToken should not be returned.
-        delete hook.result.accessToken;
 
         userService.patch(userId, { challenge: undefined })
         .then(user => {
