@@ -14,25 +14,19 @@ module.exports = function (options = {}) {
 
   return function (hook) {
     return new Promise(function (resolve, reject) {
-      // Only run this hook for the 'challenge-request' strategy.
-      if (hook.data.strategy === options.name) {
-        let userService = hook.app.service(options.userService);
-        let user = hook.params.user;
-        let userId = user[options.idField];
+      let userService = hook.app.service(options.userService);
+      let user = hook.params.user;
+      let userId = user[options.idField];
 
-
-        userService.patch(userId, { challenge: undefined })
-        .then(user => {
-          return resolve(hook);
-        })
-        .catch(error => {
-          console.log(error);
-          // TODO: prevent leaks through this error.
-          return reject(error);
-        });
-      } else {
-        resolve(hook);
-      }
+      userService.patch(userId, { challenge: undefined })
+      .then(user => {
+        return resolve(hook);
+      })
+      .catch(error => {
+        console.log(error);
+        // TODO: prevent leaks through this error.
+        return reject(error);
+      });
     });
   };
 };

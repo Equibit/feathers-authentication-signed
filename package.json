@@ -54,7 +54,9 @@
   "dependencies": {
     "debug": "^2.6.3",
     "feathers-authentication-local": "^0.3.3",
-    "feathers-errors": "^2.6.2"
+    "feathers-errors": "^2.6.2",
+    "feathers-hooks": "^1.8.1",
+    "feathers-hooks-common": "3.0.0-pre.1"
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",

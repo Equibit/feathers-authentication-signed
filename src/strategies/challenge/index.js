@@ -1,6 +1,7 @@
 // import errors from 'feathers-errors';
 const makeDebug = require('debug');
 const local = require('feathers-authentication-local');
+const { iff } = require('feathers-hooks-common');
 const checkTwoFactor = require('./hook.two-factor');
 const removeChallenge = require('./hook.remove-challenge');
 const createVerifier = require('./verifier');
@@ -33,8 +34,11 @@ module.exports = function challengeStrategy (options = {}) {
       },
       after: {
         create: [
-          removeChallenge(options),
-          checkTwoFactor(options)
+          iff(
+            hook => hook.data.strategy === options.name,
+            removeChallenge(options),
+            checkTwoFactor(options)
+          )
         ]
       }
     });

@@ -1,6 +1,7 @@
 // import errors from 'feathers-errors';
 const makeDebug = require('debug');
 const local = require('feathers-authentication-local');
+const { iff } = require('feathers-hooks-common');
 const createChallenge = require('./hook.create-challenge');
 const preventSocketAuth = require('./hook.prevent-socket-auth');
 const createVerifier = require('./verifier');
@@ -27,13 +28,19 @@ module.exports = function challengeRequestStrategy (options = {}) {
     app.service('authentication').hooks({
       before: {
         create: [
-          // TODO: Test to make sure the socket doesn't get authenticated.
-          preventSocketAuth(options)
+          iff(
+            hook => hook.data.strategy === options.name,
+            // TODO: Test to make sure the socket doesn't get authenticated.
+            preventSocketAuth(options)
+          )
         ]
       },
       after: {
         create: [
-          createChallenge(options)
+          iff(
+            hook => hook.data.strategy === options.name,
+            createChallenge(options)
+          )
         ]
       }
     });

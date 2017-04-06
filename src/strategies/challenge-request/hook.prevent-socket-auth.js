@@ -11,9 +11,7 @@ module.exports = function (options) {
 
   return function preventSocketAuth (hook) {
     return new Promise((resolve, reject) => {
-      if (hook.data.strategy === options.name) {
-        hook.params.authenticated = false;
-      }
+      hook.params.authenticated = false;
       resolve(hook);
     });
   };

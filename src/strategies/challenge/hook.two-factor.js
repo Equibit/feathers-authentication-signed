@@ -18,16 +18,13 @@ module.exports = function (options = {}) {
 
   return function verifySignature (hook) {
     return new Promise(function (resolve, reject) {
-      // Only run for the challenge strategy.
-      if (hook.data.strategy === options.name) {
-        const twoFactor = hook.params[entity][twoFactorField];
+      const twoFactor = hook.params[entity][twoFactorField];
 
-        // At this point, hook.result would be { accessToken }
-        // If the user record has a `twoFactor` field, overwrite hook.result
-        // to only contain the twoFactor information.
-        if (twoFactor) {
-          hook.result = { twoFactor };
-        }
+      // At this point, hook.result would be { accessToken }
+      // If the user record has a `twoFactor` field, overwrite hook.result
+      // to only contain the twoFactor information.
+      if (twoFactor) {
+        hook.result = { twoFactor };
       }
       resolve(hook);
     });
