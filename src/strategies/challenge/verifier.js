@@ -70,7 +70,6 @@ module.exports = function createVerifier (options = {}, app) {
         })
         .catch(error => {
           console.log(error);
-          debugger;
           done(new errors.NotAuthenticated(error), null);
         });
     }

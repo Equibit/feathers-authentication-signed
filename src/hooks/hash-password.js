@@ -33,7 +33,6 @@ module.exports = function (options) {
       })
       .catch(error => {
         console.log(error);
-        debugger;
       });
   };
 };
