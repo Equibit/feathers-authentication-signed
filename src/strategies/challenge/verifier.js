@@ -56,7 +56,7 @@ module.exports = function createVerifier (options = {}, app) {
                   }
                   req.params.usingTempPassword = true;
                 }
-                return done(null, user);
+                return done(null, user, {userId: user._id});
               } else {
                 // Neither password matched.
                 done(new errors.NotAuthenticated('invalid login'), null);
