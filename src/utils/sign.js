@@ -6,11 +6,11 @@
  *   let signed = { email: 'test@test.com', signature: '34gb...248'}
  * Where the signature attribute is a hash of the stringified original data.
  */
-module.exports = function (options) {
+module.exports = function ({ createHmac }) {
   return function sign (data, secret) {
     return new Promise((resolve, reject) => {
       let dataString = JSON.stringify(data);
-      let hmac = options.createHmac('sha512', secret);
+      let hmac = createHmac('sha512', secret);
       let signature = hmac.update(dataString).digest('hex');
       data.signature = signature;
       resolve(data);

@@ -1,4 +1,5 @@
 const defaults = {
+  createHash: undefined, // Must be passed in.
   algorithm: 'sha512'
 };
 

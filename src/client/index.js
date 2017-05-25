@@ -1,14 +1,12 @@
 import makeUtils from '../utils/index';
-
-const defaults = {};
+import setupAuthenticate from './authenticate';
+import signHook from './hook.sign';
 
 export default function plugin (options) {
-  options = Object.assign({}, defaults, options);
-  let utils = makeUtils(options);
-
-  function signed () {
-
-  }
-
-  return Object.assign(signed, utils);
+  const utils = makeUtils(options);
+  utils.authenticate = setupAuthenticate(utils);
+  utils.hooks = {
+    sign: signHook(options)
+  };
+  return utils;
 }
