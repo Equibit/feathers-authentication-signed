@@ -1,7 +1,7 @@
 {
   "name": "feathers-authentication-signed",
   "description": "",
-  "version": "0.0.7",
+  "version": "1.0.0",
   "homepage": "https://github.com/feathersjs/feathers-authentication-signed",
   "main": "lib/",
   "keywords": [
