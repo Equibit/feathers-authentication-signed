@@ -6,7 +6,7 @@ export default function plugin (options) {
   const utils = makeUtils(options);
   utils.authenticate = setupAuthenticate(utils);
   utils.hooks = {
-    sign: signHook(options)
+    sign: signHook(utils)
   };
   return utils;
 }
