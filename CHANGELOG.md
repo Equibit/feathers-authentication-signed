@@ -1,5 +1,8 @@
 # Change Log
 
+## [v2.0.3](https://github.com/Equibit/feathers-authentication-signed/tree/v2.0.3) (2017-05-26)
+[Full Changelog](https://github.com/Equibit/feathers-authentication-signed/compare/v2.0.2...v2.0.3)
+
 ## [v2.0.2](https://github.com/Equibit/feathers-authentication-signed/tree/v2.0.2) (2017-05-26)
 [Full Changelog](https://github.com/Equibit/feathers-authentication-signed/compare/v2.0.1...v2.0.2)
 
