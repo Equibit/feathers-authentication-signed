@@ -40,9 +40,11 @@ module.exports = function makeSignHook ({ sign }) {
       if (options.strict && !secret) {
         throw new Error('Could not sign request due to missing secret. The user is not authenticated.');
       }
-      hook.data = sign(hook.data, secret);
-
-      return Promise.resolve(hook);
+      return sign(hook.data, secret)
+        .then(data => {
+          hook.data = data;
+          return hook;
+        });
     };
   };
 };
