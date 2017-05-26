@@ -1,3 +1,7 @@
+const defaults = {
+  strict: false
+};
+
 /**
  * The signData hook pulls the secret from the Feathers app and uses it to sign
  * all outgoing requests.  A signature is created by taking the original request
@@ -28,11 +32,12 @@
  * ```
  */
 module.exports = function makeSignHook ({ sign }) {
-  return function ({ strict = false }) {
+  return function (options) {
+    options = Object.assign({}, defaults, options);
     return function signData (hook) {
       const secret = hook.app.get('secret') || '';
 
-      if (strict && !secret) {
+      if (options.strict && !secret) {
         throw new Error('Could not sign request due to missing secret. The user is not authenticated.');
       }
       hook.data = sign(hook.data, secret);
