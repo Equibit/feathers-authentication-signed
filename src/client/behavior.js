@@ -57,6 +57,9 @@ export default connect.behavior(`data/${name}`, function () {
               })
               .then(response => {
                 feathersClient.set('secret', secret);
+                if (response.user) {
+                  response.user.salt = salt;
+                }
                 return response;
               });
           });
