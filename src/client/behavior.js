@@ -29,6 +29,8 @@ export default connect.behavior(`data/${name}`, function () {
     throw new Error(`You must register the feathers-authentication-client plugin before using the ${name} behavior. See ${helpURL}`);
   }
 
+  const Session = this.Map;
+
   return {
     createData: function (data) {
       let { email, password } = convertLocalAuthData(data);
@@ -60,6 +62,7 @@ export default connect.behavior(`data/${name}`, function () {
                 if (response.user) {
                   response.user.salt = salt;
                 }
+                Session.current = new Session(response);
                 return response;
               });
           });
@@ -67,6 +70,7 @@ export default connect.behavior(`data/${name}`, function () {
     },
     destroyData: function (session) {
       return feathersClient.logout().then(function () {
+        delete Session.current;
         return session;
       });
     }
