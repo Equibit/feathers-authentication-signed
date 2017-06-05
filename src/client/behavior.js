@@ -63,6 +63,10 @@ export default connect.behavior(`data/${name}`, function () {
                   response.user.salt = salt;
                 }
                 Session.current = new Session(response);
+                if (Session.algebra && Session.algebra.id){
+                  const idProp = Object.keys(Session.algebra.clauses.id)[0]
+                  Session.connection.instanceStore.addReference(Session.current[idProp], Session.current)
+                }
                 return response;
               });
           });
@@ -70,6 +74,10 @@ export default connect.behavior(`data/${name}`, function () {
     },
     destroyData: function (session) {
       return feathersClient.logout().then(function () {
+        if (Session.algebra && Session.algebra.id){
+          const idProp = Object.keys(Session.algebra.clauses.id)[0]
+          Session.connection.instanceStore.deleteReference(Session.current[idProp])
+        }
         delete Session.current;
         return session;
       });
