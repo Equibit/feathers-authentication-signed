@@ -36,12 +36,12 @@ The client utils consist of
 
 Because the browser does come pre-packaged with a `crypto` library like Node.js does, you have to provide one.  It must provide at least the `createHmac`, `pbkdf2`, and `createHash` methods.  A browser build of the [`crypto-browserify`][https://www.npmjs.com/package/crypto-browserify] module will work.  You can also use the `@equibit/wallet-crypto` package, which includes the needed methods.
 
-**`feathers-signed.js`**
+**`models/feathers-signed.js`**
 ```js
 import signed from 'feathers-authentication-signed/client';
 import crypto from '@equibit/wallet-crypto/dist/wallet-crypto';
 
-export default signed(options);
+export default signed(crypto);
 ```
 
 The following utils are now ready for use in other modules:
