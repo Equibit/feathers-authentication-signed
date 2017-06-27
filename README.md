@@ -116,6 +116,8 @@ signed.authenticate(feathersClient, {
 
 A behavior for `can-connect` is included to assist with data modeling.  It must be imported separately.  Here's an example of how to use it in a `Session` model:
 
+**models/session.js**
+
 ```js
 import connect from 'can-connect';
 import dataParse from 'can-connect/data/parse/';
